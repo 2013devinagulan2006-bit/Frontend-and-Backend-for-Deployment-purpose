@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Cart - Devi Mart</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #fff5f8;
+            color: #333;
+        }
+
+        nav {
+            background: #ff4f87;
+            padding: 18px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+        }
+
+        nav h1 {
+            font-size: 28px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 25px;
+            font-weight: bold;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1000px;
+            margin: 40px auto;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 30px;
+        }
+
+        .cart-item {
+            background: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .cart-item img {
+            width: 120px;
+            height: 120px;
+            object-fit: contain;
+            border-radius: 10px;
+        }
+
+        .item-details {
+            flex: 1;
+        }
+
+        .item-details h3 {
+            margin-bottom: 10px;
+        }
+
+        .price {
+            color: #ff4f87;
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .item-total {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        .quantity {
+            width: 60px;
+            padding: 7px;
+            font-size: 16px;
+        }
+
+        .remove-btn {
+            background: #ff4f87;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 7px;
+            cursor: pointer;
+        }
+
+        .remove-btn:hover {
+            background: #d90072;
+        }
+
+        .summary {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin-top: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            text-align: right;
+        }
+
+        .summary h3 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .checkout-btn {
+            background: #ff4f87;
+            color: white;
+            border: none;
+            padding: 13px 25px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .checkout-btn:hover {
+            background: #d90072;
+        }
+
+        .clear-btn {
+            background: #555;
+            color: white;
+            border: none;
+            padding: 13px 25px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+
+        .continue-btn {
+            display: inline-block;
+            margin-top: 20px;
+            color: #ff4f87;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .empty-cart {
+            background: white;
+            padding: 50px;
+            text-align: center;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        @media (max-width: 700px) {
+
+            nav {
+                padding: 15px;
+            }
+
+            nav a {
+                margin-left: 10px;
+            }
+
+            .cart-item {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .summary {
+                text-align: center;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<nav>
+
+    <h1>Devi Mart</h1>
+
+    <div>
+
+        <a href="home.html">Home</a>
+
+        <a href="products.html">Products</a>
+
+        <a href="profile.html">Profile</a>
+
+    </div>
+
+</nav>
+
+
+<div class="container">
+
+    <h2>🛒 My Cart</h2>
+
+    <div id="cartContainer"></div>
+
+    <div class="summary" id="summary"></div>
+
+</div>
+
+
+<script>
+
+    const cartContainer =
+        document.getElementById("cartContainer");
+
+    const summary =
+        document.getElementById("summary");
+
+
+    /* =========================
+       LOAD CART FROM BACKEND
+       ========================= */
+
+    async function loadCart() {
+
+        try {
+
+            const response =
+                await fetch(
+                    "http://localhost:8080/api/cart"
+                );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Could not load cart"
+                );
+
+            }
+
+
+            const cart =
+                await response.json();
+
+
+            displayCart(cart);
+
+
+        } catch (error) {
+
+            console.error(
+                "Cart Error:",
+                error
+            );
+
+
+            cartContainer.innerHTML = `
+                <div class="empty-cart">
+
+                    <h3>
+                        Unable to load cart ❌
+                    </h3>
+
+                    <p>
+                        Please make sure the backend is running.
+                    </p>
+
+                </div>
+            `;
+
+
+            summary.style.display = "none";
+
+        }
+
+    }
+
+
+    /* =========================
+       DISPLAY CART
+       ========================= */
+
+    function displayCart(cart) {
+
+        if (cart.length === 0) {
+
+            cartContainer.innerHTML = `
+                <div class="empty-cart">
+
+                    <h3>
+                        Your cart is empty 🛒
+                    </h3>
+
+                    <p>
+                        Please add a product from the Products page.
+                    </p>
+
+                </div>
+            `;
+
+
+            summary.style.display = "none";
+
+
+            return;
+
+        }
+
+
+        summary.style.display = "block";
+
+
+        cartContainer.innerHTML = "";
+
+
+        let grandTotal = 0;
+
+
+        cart.forEach(function(product) {
+
+            const price =
+                Number(product.price);
+
+
+            const quantity =
+                Number(product.quantity);
+
+
+            const total =
+                Number(product.totalPrice);
+
+
+            grandTotal += total;
+
+
+            cartContainer.innerHTML += `
+
+                <div class="cart-item">
+
+                    <img
+                        src="${product.image}"
+                        alt="${product.productName}"
+                    >
+
+
+                    <div class="item-details">
+
+                        <h3>
+                            ${product.productName}
+                        </h3>
+
+
+                        <div class="price">
+                            ₹${price.toLocaleString("en-IN")}
+                        </div>
+
+
+                        <label>
+                            Quantity:
+                        </label>
+
+
+                        <input
+                            type="number"
+                            class="quantity"
+                            value="${quantity}"
+                            min="1"
+                            onchange="
+                                updateQuantity(
+                                    ${product.id},
+                                    this.value
+                                )
+                            "
+                        >
+
+
+                        <div class="item-total">
+
+                            Item Total:
+                            ₹${total.toLocaleString("en-IN")}
+
+                        </div>
+
+                    </div>
+
+
+                    <button
+                        class="remove-btn"
+                        onclick="
+                            removeItem(${product.id})
+                        "
+                    >
+                        Remove
+                    </button>
+
+                </div>
+
+            `;
+
+        });
+
+
+        summary.innerHTML = `
+
+            <h3>
+                Total:
+                ₹${grandTotal.toLocaleString("en-IN")}
+            </h3>
+
+
+            <button
+                class="checkout-btn"
+                onclick="checkout()"
+            >
+                Proceed to Checkout
+            </button>
+
+
+            <button
+                class="clear-btn"
+                onclick="clearCart()"
+            >
+                Clear Cart
+            </button>
+
+
+            <br>
+
+
+            <a
+                href="products.html"
+                class="continue-btn"
+            >
+                ← Continue Shopping
+            </a>
+
+        `;
+
+    }
+
+
+    /* =========================
+       UPDATE QUANTITY
+       ========================= */
+
+    async function updateQuantity(id, value) {
+
+        value = Number(value);
+
+
+        if (value < 1) {
+
+            value = 1;
+
+        }
+
+
+        try {
+
+            const response =
+                await fetch(
+                    "http://localhost:8080/api/cart/" + id,
+                    {
+                        method: "PUT",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        body: JSON.stringify({
+                            quantity: value
+                        })
+                    }
+                );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Quantity update failed"
+                );
+
+            }
+
+
+            await loadCart();
+
+
+        } catch (error) {
+
+            console.error(
+                "Quantity Error:",
+                error
+            );
+
+
+            alert(
+                "Could not update quantity."
+            );
+
+        }
+
+    }
+
+
+    /* =========================
+       REMOVE PRODUCT
+       ========================= */
+
+    async function removeItem(id) {
+
+        try {
+
+            const response =
+                await fetch(
+                    "http://localhost:8080/api/cart/" + id,
+                    {
+                        method: "DELETE"
+                    }
+                );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Remove failed"
+                );
+
+            }
+
+
+            alert(
+                "Product removed from cart!"
+            );
+
+
+            await loadCart();
+
+
+        } catch (error) {
+
+            console.error(
+                "Remove Error:",
+                error
+            );
+
+
+            alert(
+                "Could not remove product."
+            );
+
+        }
+
+    }
+
+
+    /* =========================
+       CLEAR CART
+       ========================= */
+
+    async function clearCart() {
+
+        try {
+
+            const response =
+                await fetch(
+                    "http://localhost:8080/api/cart",
+                    {
+                        method: "DELETE"
+                    }
+                );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Clear cart failed"
+                );
+
+            }
+
+
+            alert(
+                "Cart cleared!"
+            );
+
+
+            await loadCart();
+
+
+        } catch (error) {
+
+            console.error(
+                "Clear Cart Error:",
+                error
+            );
+
+
+            alert(
+                "Could not clear cart."
+            );
+
+        }
+
+    }
+
+
+    /* =========================
+       CHECKOUT
+       ========================= */
+
+    function checkout() {
+
+        window.location.href =
+            "checkout.html";
+
+    }
+
+
+    /* =========================
+       LOAD CART WHEN PAGE OPENS
+       ========================= */
+
+    loadCart();
+
+</script>
+
+
+</body>
+
+</html>
