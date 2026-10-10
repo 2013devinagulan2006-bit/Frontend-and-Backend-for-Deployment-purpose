@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Devi Mart - Register</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            margin: 0;
+            background: #fce4ec;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 420px;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow:
+                0 5px 20px
+                rgba(0,0,0,0.15);
+        }
+
+        h1 {
+            text-align: center;
+            color: #ff1493;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #777;
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-top: 14px;
+            margin-bottom: 6px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 11px;
+            border: 1px solid #ccc;
+            border-radius: 7px;
+            font-size: 15px;
+        }
+
+        .type-title {
+            margin-top: 18px;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .account-types {
+            display: flex;
+            gap: 8px;
+        }
+
+        .account-option {
+            flex: 1;
+            padding: 12px 5px;
+            text-align: center;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        .account-option:hover {
+            border-color: #ff1493;
+        }
+
+        .account-option.selected {
+            border-color: #ff1493;
+            background: #fff0f6;
+            color: #ff1493;
+        }
+
+        .account-option input {
+            display: none;
+        }
+
+        .fixed-info {
+            margin-top: 15px;
+            padding: 12px;
+            background: #fff3f8;
+            border-radius: 8px;
+            font-size: 13px;
+            color: #555;
+            display: none;
+        }
+
+        .register-btn {
+            width: 100%;
+            margin-top: 25px;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: #ff1493;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .register-btn:hover {
+            background: #d90072;
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .login-link a {
+            color: #ff1493;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="container">
+
+    <h1>
+        Devi Mart
+    </h1>
+
+    <p class="subtitle">
+        Create your account
+    </p>
+
+
+    <form id="registerForm">
+
+
+        <label for="name">
+            Full Name
+        </label>
+
+        <input
+            type="text"
+            id="name"
+            placeholder="Enter your full name"
+            required
+        >
+
+
+        <label for="email">
+            Email Address
+        </label>
+
+        <input
+            type="email"
+            id="email"
+            placeholder="Enter your email"
+            required
+        >
+
+
+        <label for="phone">
+            Phone Number
+        </label>
+
+        <input
+            type="tel"
+            id="phone"
+            placeholder="Enter your phone number"
+            required
+        >
+
+
+        <label for="password">
+            Password
+        </label>
+
+        <input
+            type="password"
+            id="password"
+            placeholder="Enter your password"
+            required
+        >
+
+
+        <label for="confirmPassword">
+            Confirm Password
+        </label>
+
+        <input
+            type="password"
+            id="confirmPassword"
+            placeholder="Confirm your password"
+            required
+        >
+
+
+        <div class="type-title">
+            Select Account Type
+        </div>
+
+
+        <div class="account-types">
+
+
+            <label class="account-option selected">
+
+                <input
+                    type="radio"
+                    name="accountType"
+                    value="buyer"
+                    checked
+                >
+
+                👤 Buyer
+
+            </label>
+
+
+            <label class="account-option">
+
+                <input
+                    type="radio"
+                    name="accountType"
+                    value="seller"
+                >
+
+                🏪 Seller
+
+            </label>
+
+
+            <label class="account-option">
+
+                <input
+                    type="radio"
+                    name="accountType"
+                    value="admin"
+                >
+
+                👨‍💼 Admin
+
+            </label>
+
+
+        </div>
+
+
+        <div
+            id="fixedInfo"
+            class="fixed-info">
+
+            Seller and Admin accounts are fixed
+            accounts. Only the authorized
+            Seller/Admin credentials can be used
+            for login.
+
+        </div>
+
+
+        <button
+            type="submit"
+            class="register-btn">
+
+            Create Account
+
+        </button>
+
+
+    </form>
+
+
+    <div class="login-link">
+
+        Already have an account?
+
+        <a href="login.html">
+            Login
+        </a>
+
+    </div>
+
+</div>
+
+
+<script>
+
+
+const accountOptions =
+    document.querySelectorAll(
+        ".account-option"
+    );
+
+
+const fixedInfo =
+    document.getElementById(
+        "fixedInfo"
+    );
+
+
+accountOptions.forEach(
+    function(option) {
+
+        option.addEventListener(
+            "click",
+            function() {
+
+
+                accountOptions.forEach(
+                    function(item) {
+
+                        item.classList.remove(
+                            "selected"
+                        );
+
+                    }
+                );
+
+
+                option.classList.add(
+                    "selected"
+                );
+
+
+                const selectedType =
+                    document.querySelector(
+                        'input[name="accountType"]:checked'
+                    ).value;
+
+
+                if (
+                    selectedType === "seller" ||
+                    selectedType === "admin"
+                ) {
+
+                    fixedInfo.style.display =
+                        "block";
+
+                }
+
+                else {
+
+                    fixedInfo.style.display =
+                        "none";
+
+                }
+
+            }
+        );
+
+    }
+);
+
+
+document.getElementById("registerForm")
+.addEventListener(
+    "submit",
+    async function(event) {
+
+        event.preventDefault();
+
+
+        const name =
+            document
+            .getElementById("name")
+            .value
+            .trim();
+
+
+        const email =
+            document
+            .getElementById("email")
+            .value
+            .trim();
+
+
+        const phone =
+            document
+            .getElementById("phone")
+            .value
+            .trim();
+
+
+        const password =
+            document
+            .getElementById("password")
+            .value;
+
+
+        const confirmPassword =
+            document
+            .getElementById("confirmPassword")
+            .value;
+
+
+        const accountType =
+            document.querySelector(
+                'input[name="accountType"]:checked'
+            ).value;
+
+
+        // ============================
+        // PASSWORD CHECK
+        // ============================
+
+        if (
+            password !==
+            confirmPassword
+        ) {
+
+            alert(
+                "Passwords do not match."
+            );
+
+            return;
+        }
+
+
+        // ============================
+        // REGISTER SELECTED ACCOUNT
+        // ============================
+
+        const newUser = {
+
+            name: name,
+
+            email: email,
+
+            phone: phone,
+
+            password: password,
+
+            accountType: accountType
+
+        };
+
+
+        try {
+
+
+            const response =
+                await fetch(
+                    "http://localhost:8080/api/auth/register",
+                    {
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        body:
+                            JSON.stringify(
+                                newUser
+                            )
+                    }
+                );
+
+
+            if (!response.ok) {
+
+                const errorText =
+                    await response.text();
+
+                console.error(
+                    errorText
+                );
+
+                alert(
+                    "Registration failed. " +
+                    "This email may already be registered."
+                );
+
+                return;
+            }
+
+
+            if (accountType === "seller") {
+
+                alert(
+                    "Seller account created successfully!"
+                );
+
+            }
+
+            else if (accountType === "admin") {
+
+                alert(
+                    "Admin account created successfully!"
+                );
+
+            }
+
+            else {
+
+                alert(
+                    "Buyer account created successfully!"
+                );
+
+            }
+
+
+            window.location.href =
+                "login.html";
+
+
+        }
+        catch (error) {
+
+            console.error(
+                "Registration Error:",
+                error
+            );
+
+
+            alert(
+                "Cannot connect to backend. " +
+                "Please make sure the backend is running."
+            );
+
+        }
+
+    }
+);
+
+</script>
+
+</body>
+
+</html>

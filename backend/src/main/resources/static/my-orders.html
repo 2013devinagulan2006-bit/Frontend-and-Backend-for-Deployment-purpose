@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Orders - Devi Mart</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #fff0f6;
+        }
+
+        nav {
+            background: #ff69b4;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav h2 {
+            color: white;
+            margin: 0;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 900px;
+            margin: 30px auto;
+        }
+
+        h1 {
+            color: #d63384;
+            text-align: center;
+        }
+
+        .order {
+            background: white;
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .order h3 {
+            color: #d63384;
+        }
+
+        .order p {
+            margin: 8px 0;
+        }
+
+        .status {
+            color: green;
+            font-weight: bold;
+        }
+
+        .empty {
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        .empty a {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 20px;
+            background: #ff69b4;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        @media (max-width: 700px) {
+            nav {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<nav>
+    <h2>Devi Mart</h2>
+
+    <div class="nav-links">
+        <a href="home.html">Home</a>
+        <a href="products.html">Products</a>
+        <a href="wishlist.html">♡ Wishlist</a>
+        <a href="cart.html">🛒 Cart</a>
+        <a href="my-orders.html">📦 My Orders</a>
+        <a href="profile.html">Profile</a>
+    </div>
+</nav>
+
+<div class="container">
+
+    <h1>My Orders</h1>
+
+    <div id="ordersContainer">
+        <p style="text-align:center;">Loading orders...</p>
+    </div>
+
+</div>
+
+<script>
+
+fetch("http://localhost:8080/api/orders")
+    .then(response => {
+        if (!response.ok) {
+            throw new Error("Failed to load orders");
+        }
+
+        return response.json();
+    })
+
+    .then(orders => {
+
+        const container = document.getElementById("ordersContainer");
+
+        if (orders.length === 0) {
+
+            container.innerHTML = `
+                <div class="empty">
+                    <h2>No Orders Yet</h2>
+                    <p>You haven't placed any orders.</p>
+                    <a href="products.html">Shop Now</a>
+                </div>
+            `;
+
+            return;
+        }
+
+        container.innerHTML = "";
+
+        orders.forEach(order => {
+
+            container.innerHTML += `
+                <div class="order">
+
+                    <h3>${order.productName}</h3>
+
+                    <p>
+                        <strong>Quantity:</strong>
+                        ${order.quantity}
+                    </p>
+
+                    <p>
+                        <strong>Price:</strong>
+                        ₹${order.price}
+                    </p>
+
+                    <p>
+                        <strong>Total Price:</strong>
+                        ₹${order.totalPrice}
+                    </p>
+
+                    <p class="status">
+                        Order Placed
+                    </p>
+
+                </div>
+            `;
+        });
+
+    })
+
+    .catch(error => {
+
+        console.error(error);
+
+        document.getElementById("ordersContainer").innerHTML = `
+            <div class="empty">
+                <h2>Unable to Load Orders</h2>
+                <p>Please make sure the backend is running.</p>
+                <a href="home.html">Go to Home</a>
+            </div>
+        `;
+
+    });
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Devi Mart - Order Success</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(
+                135deg,
+                #ffd6e7,
+                #fff0f6
+            );
+            padding: 20px;
+        }
+
+        .success-container {
+            width: 450px;
+            background: white;
+            padding: 40px;
+            border-radius: 18px;
+            text-align: center;
+            box-shadow:
+                0 10px 30px
+                rgba(0, 0, 0, 0.15);
+        }
+
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            background: #e91e63;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 45px;
+        }
+
+        h1 {
+            color: #e91e63;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+
+        .message {
+            color: #555;
+            font-size: 16px;
+            margin-bottom: 25px;
+        }
+
+        .order-box {
+            text-align: left;
+            background: #fff5f8;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+
+        .order-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            padding: 9px 0;
+            border-bottom: 1px solid #f0dce3;
+        }
+
+        .order-row:last-child {
+            border-bottom: none;
+        }
+
+        .label {
+            font-weight: bold;
+            color: #555;
+        }
+
+        .value {
+            color: #222;
+            text-align: right;
+        }
+
+        button {
+            width: 100%;
+            padding: 13px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .home-btn {
+            border: none;
+            background: #e91e63;
+            color: white;
+        }
+
+        .home-btn:hover {
+            background: #c2185b;
+        }
+
+        .orders-btn {
+            margin-top: 12px;
+            border: 2px solid #e91e63;
+            background: white;
+            color: #e91e63;
+        }
+
+        .orders-btn:hover {
+            background: #fff0f6;
+        }
+
+        .footer {
+            margin-top: 20px;
+            color: #999;
+            font-size: 12px;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="success-container">
+
+
+    <div class="success-icon">
+        ✓
+    </div>
+
+
+    <h1>
+        Order Registered Successfully!
+    </h1>
+
+
+    <p class="message">
+        Thank you for shopping with Devi Mart.
+        Your order has been placed successfully.
+    </p>
+
+
+    <div class="order-box">
+
+        <div class="order-row">
+
+            <span class="label">
+                Product
+            </span>
+
+            <span
+                class="value"
+                id="productName">
+                Loading...
+            </span>
+
+        </div>
+
+
+        <div class="order-row">
+
+            <span class="label">
+                Quantity
+            </span>
+
+            <span
+                class="value"
+                id="quantity">
+                Loading...
+            </span>
+
+        </div>
+
+
+        <div class="order-row">
+
+            <span class="label">
+                Total Amount
+            </span>
+
+            <span class="value">
+                ₹<span id="total">0</span>
+            </span>
+
+        </div>
+
+
+        <div class="order-row">
+
+            <span class="label">
+                Payment
+            </span>
+
+            <span
+                class="value"
+                id="payment">
+                Cash on Delivery
+            </span>
+
+        </div>
+
+
+        <div class="order-row">
+
+            <span class="label">
+                Customer
+            </span>
+
+            <span
+                class="value"
+                id="customerName">
+                Customer
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <button
+        class="home-btn"
+        onclick="goHome()">
+
+        🏠 Back to Home
+
+    </button>
+
+
+    <button
+        class="orders-btn"
+        onclick="viewOrders()">
+
+        📦 View My Orders
+
+    </button>
+
+
+    <div class="footer">
+        © 2026 Devi Mart. All Rights Reserved.
+    </div>
+
+
+</div>
+
+
+
+<script>
+
+
+fetch("http://localhost:8080/api/orders")
+
+    .then(response => {
+
+        if (!response.ok) {
+            throw new Error("Failed to load orders");
+        }
+
+        return response.json();
+
+    })
+
+    .then(orders => {
+
+
+        if (!orders || orders.length === 0) {
+
+            document.getElementById(
+                "productName"
+            ).textContent = "No order found";
+
+            document.getElementById(
+                "quantity"
+            ).textContent = "-";
+
+            document.getElementById(
+                "total"
+            ).textContent = "0";
+
+            return;
+
+        }
+
+
+        const order =
+            orders[orders.length - 1];
+
+
+        document.getElementById(
+            "productName"
+        ).textContent =
+            order.productName ||
+            order.product ||
+            "Product";
+
+
+        document.getElementById(
+            "quantity"
+        ).textContent =
+            order.quantity || 1;
+
+
+        const total =
+            order.totalPrice ||
+            order.totalAmount ||
+            0;
+
+
+        document.getElementById(
+            "total"
+        ).textContent =
+            Number(total).toLocaleString("en-IN");
+
+
+        document.getElementById(
+            "payment"
+        ).textContent =
+            order.paymentMethod ||
+            "Cash on Delivery";
+
+
+        document.getElementById(
+            "customerName"
+        ).textContent =
+            order.customerName ||
+            "Customer";
+
+
+    })
+
+    .catch(error => {
+
+        console.error(
+            "Order loading error:",
+            error
+        );
+
+    });
+
+
+
+function goHome() {
+
+    window.location.href =
+        "home.html";
+
+}
+
+
+function viewOrders() {
+
+    window.location.href =
+        "my-orders.html";
+
+}
+
+
+</script>
+
+
+</body>
+
+</html>

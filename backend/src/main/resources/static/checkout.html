@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Devi Mart - Checkout</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f5f5f5;
+        }
+
+        nav {
+            background: linear-gradient(135deg, #ff4f9a, #ff1493);
+            padding: 18px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            color: white;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            margin-left: 20px;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1000px;
+            margin: 35px auto;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .checkout-box {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.12);
+            margin-bottom: 25px;
+        }
+
+        .checkout-box h2 {
+            color: #ff1493;
+            margin-bottom: 20px;
+        }
+
+        .cart-item {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 15px 0;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+
+        .cart-item img {
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+            border-radius: 10px;
+        }
+
+        .product-info {
+            flex: 1;
+        }
+
+        .product-info h3 {
+            margin-bottom: 10px;
+        }
+
+        .product-info p {
+            margin: 6px 0;
+        }
+
+        .item-total {
+            font-weight: bold;
+            color: #e91e63;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-top: 15px;
+            margin-bottom: 7px;
+        }
+
+        input,
+        textarea,
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            outline: none;
+            font-size: 15px;
+        }
+
+        textarea {
+            height: 100px;
+            resize: none;
+        }
+
+        .total {
+            text-align: right;
+            font-size: 22px;
+            font-weight: bold;
+            color: #e91e63;
+            margin-top: 20px;
+        }
+
+        .place-order {
+            width: 100%;
+            padding: 14px;
+            margin-top: 20px;
+            border: none;
+            border-radius: 8px;
+            background: #ff1493;
+            color: white;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .place-order:hover {
+            background: #d90072;
+        }
+
+        .place-order:disabled {
+            background: #aaa;
+            cursor: not-allowed;
+        }
+
+        .empty-cart {
+            text-align: center;
+            padding: 40px;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-top: 20px;
+            color: #ff1493;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        footer {
+            margin-top: 50px;
+            padding: 25px;
+            background: #222;
+            color: white;
+            text-align: center;
+        }
+
+        @media (max-width: 600px) {
+
+            nav {
+                padding: 15px 20px;
+            }
+
+            .cart-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .nav-links a {
+                margin-left: 10px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <nav>
+
+        <div class="logo">
+            Devi Mart
+        </div>
+
+        <div class="nav-links">
+
+            <a href="home.html">
+                Home
+            </a>
+
+            <a href="products.html">
+                Products
+            </a>
+
+            <a href="cart.html">
+                Cart 🛒
+            </a>
+
+        </div>
+
+    </nav>
+
+    <div class="container">
+
+        <h1>
+            Checkout
+        </h1>
+
+        <div class="checkout-box">
+
+            <h2>
+                🛒 Order Summary
+            </h2>
+
+            <div id="cartItems">
+
+                <p>
+                    Loading...
+                </p>
+
+            </div>
+
+            <div class="total">
+
+                Total:
+                ₹<span id="total">0</span>
+
+            </div>
+
+        </div>
+
+        <div class="checkout-box">
+
+            <h2>
+                📦 Delivery Details
+            </h2>
+
+            <label>
+                Full Name
+            </label>
+
+            <input
+                type="text"
+                id="fullName"
+                placeholder="Enter your full name"
+            >
+
+            <label>
+                Phone Number
+            </label>
+
+            <input
+                type="tel"
+                id="phone"
+                placeholder="Enter your phone number"
+            >
+
+            <label>
+                Delivery Address
+            </label>
+
+            <textarea
+                id="address"
+                placeholder="Enter your complete delivery address"
+            ></textarea>
+
+        </div>
+
+        <div class="checkout-box">
+
+            <h2>
+                💳 Payment Method
+            </h2>
+
+            <label>
+                Choose Payment Method
+            </label>
+
+            <select id="payment">
+
+                <option value="">
+                    Select Payment Method
+                </option>
+
+                <option value="Cash on Delivery">
+                    Cash on Delivery
+                </option>
+
+                <option value="UPI">
+                    UPI
+                </option>
+
+                <option value="Card">
+                    Credit / Debit Card
+                </option>
+
+            </select>
+
+            <button
+                id="placeOrderButton"
+                class="place-order"
+                onclick="placeOrder()"
+                disabled
+            >
+                Place Order
+            </button>
+
+        </div>
+
+    </div>
+
+    <footer>
+
+        <p>
+            © 2026 Devi Mart. All Rights Reserved.
+        </p>
+
+    </footer>
+
+    <script>
+        let checkoutItems = [];
+
+        let grandTotal = 0;
+
+        let checkoutMode = "cart";
+
+
+        async function loadCheckoutItems() {
+
+            try {
+
+                const urlParams =
+                    new URLSearchParams(
+                        window.location.search
+                    );
+
+                const savedMode =
+                    localStorage.getItem(
+                        "checkoutMode"
+                    );
+
+
+                if (
+                    savedMode === "buyNow" ||
+                    urlParams.get("buyNow") === "true"
+                ) {
+
+                    checkoutMode = "buyNow";
+
+                    const buyNowProduct =
+                        localStorage.getItem(
+                            "buyNowProduct"
+                        );
+
+
+                    if (!buyNowProduct) {
+
+                        showEmpty(
+                            "Buy Now product not found."
+                        );
+
+                        return;
+                    }
+
+
+                    const product =
+                        JSON.parse(
+                            buyNowProduct
+                        );
+
+
+                    checkoutItems = [product];
+
+                    displayCheckoutItems();
+
+                    return;
+                }
+
+
+                checkoutMode = "cart";
+
+
+                const selectedIdsString =
+                    urlParams.get("cartIds");
+
+
+                if (
+                    !selectedIdsString ||
+                    selectedIdsString.trim() === ""
+                ) {
+
+                    showEmpty(
+                        "No products selected for checkout."
+                    );
+
+                    return;
+                }
+
+
+                const selectedIds =
+                    selectedIdsString
+                        .split(",")
+                        .map(function(id) {
+
+                            return String(id).trim();
+
+                        })
+                        .filter(function(id) {
+
+                            return id !== "";
+
+                        });
+
+
+                const response =
+                    await fetch(
+                        "http://localhost:8080/api/cart"
+                    );
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "Could not load cart"
+                    );
+
+                }
+
+
+                const allCartItems =
+                    await response.json();
+
+
+                checkoutItems =
+                    allCartItems.filter(
+                        function(item) {
+
+                            return selectedIds.includes(
+                                String(item.id)
+                            );
+
+                        }
+                    );
+
+
+                if (
+                    checkoutItems.length === 0
+                ) {
+
+                    showEmpty(
+                        "Selected products were not found in the cart."
+                    );
+
+                    return;
+                }
+
+
+                displayCheckoutItems();
+
+
+            } catch (error) {
+
+                console.error(
+                    "Checkout Error:",
+                    error
+                );
+
+
+                showEmpty(
+                    "Unable to load checkout items. Please make sure the backend is running."
+                );
+
+            }
+
+        }
+
+
+        function showEmpty(message) {
+
+            const summary =
+                document.getElementById(
+                    "cartItems"
+                );
+
+
+            if (summary) {
+
+                summary.innerHTML =
+                    "<p>" + message + "</p>";
+
+            }
+
+
+            const button =
+                document.getElementById(
+                    "placeOrderButton"
+                );
+
+
+            if (button) {
+
+                button.disabled = true;
+
+            }
+
+        }
+
+
+        function displayCheckoutItems() {
+
+            const summary =
+                document.getElementById(
+                    "cartItems"
+                );
+
+
+            if (!summary) {
+
+                return;
+
+            }
+
+
+            summary.innerHTML = "";
+
+            grandTotal = 0;
+
+
+            checkoutItems.forEach(
+                function(item) {
+
+                    const price =
+                        Number(item.price) || 0;
+
+
+                    const quantity =
+                        Number(item.quantity) || 1;
+
+
+                    const subtotal =
+                        price * quantity;
+
+
+                    grandTotal += subtotal;
+
+
+                    const itemDiv =
+                        document.createElement(
+                            "div"
+                        );
+
+
+                    itemDiv.className =
+                        "cart-item";
+
+
+                    itemDiv.innerHTML = `
+
+                        <img
+                            src="${item.image || ""}"
+                            alt="${item.productName || "Product"}"
+                        >
+
+                        <div class="product-info">
+
+                            <h3>
+                                ${item.productName || "Product"}
+                            </h3>
+
+                            <p>
+                                Price: ₹${price.toFixed(2)}
+                            </p>
+
+                            <p>
+                                Quantity: ${quantity}
+                            </p>
+
+                            <p class="item-total">
+                                Total: ₹${subtotal.toFixed(2)}
+                            </p>
+
+                        </div>
+
+                    `;
+
+
+                    summary.appendChild(
+                        itemDiv
+                    );
+
+                }
+            );
+
+
+            const totalElement =
+                document.getElementById(
+                    "total"
+                );
+
+
+            if (totalElement) {
+
+                totalElement.textContent =
+                    grandTotal.toFixed(2);
+
+            }
+
+
+            const button =
+                document.getElementById(
+                    "placeOrderButton"
+                );
+
+
+            if (button) {
+
+                button.disabled =
+                    checkoutItems.length === 0;
+
+            }
+
+        }
+        async function placeOrder() {
+
+            const button =
+                document.getElementById(
+                    "placeOrderButton"
+                );
+
+
+            const customerName =
+                document.getElementById(
+                    "fullName"
+                ).value.trim();
+
+
+            const customerPhone =
+                document.getElementById(
+                    "phone"
+                ).value.trim();
+
+
+            const customerAddress =
+                document.getElementById(
+                    "address"
+                ).value.trim();
+
+
+            const paymentMethod =
+                document.getElementById(
+                    "payment"
+                ).value;
+
+
+            if (!customerName) {
+
+                alert(
+                    "Please enter your full name."
+                );
+
+                return;
+            }
+
+
+            if (!customerPhone) {
+
+                alert(
+                    "Please enter your phone number."
+                );
+
+                return;
+            }
+
+
+            if (!customerAddress) {
+
+                alert(
+                    "Please enter your delivery address."
+                );
+
+                return;
+            }
+
+
+            if (!paymentMethod) {
+
+                alert(
+                    "Please select a payment method."
+                );
+
+                return;
+            }
+
+
+            if (
+                !checkoutItems ||
+                checkoutItems.length === 0
+            ) {
+
+                alert(
+                    "No products available for checkout."
+                );
+
+                return;
+            }
+
+
+            button.disabled = true;
+
+
+            try {
+
+                const loggedInUser =
+                    localStorage.getItem(
+                        "loggedInUser"
+                    );
+
+
+                let customerEmail = "";
+
+
+                if (loggedInUser) {
+
+                    try {
+
+                        const user =
+                            JSON.parse(
+                                loggedInUser
+                            );
+
+
+                        customerEmail =
+                            user.email || "";
+
+                    } catch (error) {
+
+                        console.warn(
+                            "Could not read logged in user."
+                        );
+
+                    }
+
+                }
+
+
+                for (
+                    const item of checkoutItems
+                ) {
+
+                    const price =
+                        Number(item.price) || 0;
+
+
+                    const quantity =
+                        Number(item.quantity) || 1;
+
+
+                    const totalPrice =
+                        price * quantity;
+
+
+                    const order = {
+
+                        productName:
+                            item.productName,
+
+                        price:
+                            price,
+
+                        quantity:
+                            quantity,
+
+                        totalPrice:
+                            totalPrice,
+
+                        customerName:
+                            customerName,
+
+                        customerEmail:
+                            customerEmail,
+
+                        customerPhone:
+                            customerPhone,
+
+                        customerAddress:
+                            customerAddress,
+
+                        paymentMethod:
+                            paymentMethod,
+
+                        orderDate:
+                            new Date().toISOString(),
+
+                        status:
+                            "Pending"
+
+                    };
+
+
+                    const response =
+                        await fetch(
+                            "http://localhost:8080/api/orders",
+                            {
+                                method: "POST",
+
+                                headers: {
+                                    "Content-Type":
+                                        "application/json"
+                                },
+
+                                body:
+                                    JSON.stringify(order)
+                            }
+                        );
+
+
+                    if (!response.ok) {
+
+                        throw new Error(
+                            "Order could not be saved."
+                        );
+
+                    }
+
+                }
+
+
+                if (
+                    checkoutMode === "cart"
+                ) {
+
+                    const urlParams =
+                        new URLSearchParams(
+                            window.location.search
+                        );
+
+
+                    const selectedIdsString =
+                        urlParams.get(
+                            "cartIds"
+                        );
+
+
+                    if (
+                        selectedIdsString &&
+                        selectedIdsString.trim() !== ""
+                    ) {
+
+                        const selectedIds =
+                            selectedIdsString
+                                .split(",")
+                                .map(function(id) {
+
+                                    return String(
+                                        id
+                                    ).trim();
+
+                                })
+                                .filter(function(id) {
+
+                                    return id !== "";
+
+                                });
+
+
+                        for (
+                            const id of selectedIds
+                        ) {
+
+                            const deleteResponse =
+                                await fetch(
+                                    "http://localhost:8080/api/cart/" +
+                                    id,
+                                    {
+                                        method: "DELETE"
+                                    }
+                                );
+
+
+                            if (
+                                !deleteResponse.ok &&
+                                deleteResponse.status !== 404
+                            ) {
+
+                                console.warn(
+                                    "Could not delete cart item:",
+                                    id
+                                );
+
+                            }
+
+                        }
+
+                    }
+
+                }
+
+
+                localStorage.removeItem(
+                    "buyNowProduct"
+                );
+
+
+                localStorage.removeItem(
+                    "checkoutMode"
+                );
+
+
+                alert(
+                    "Order placed successfully!"
+                );
+
+
+                window.location.href =
+                    "order-success.html";
+
+
+            } catch (error) {
+
+                console.error(
+                    "Place Order Error:",
+                    error
+                );
+
+
+                alert(
+                    "Failed to place order. Please try again."
+                );
+
+
+                button.disabled = false;
+
+            }
+
+        }
+
+
+        loadCheckoutItems();
+
+    </script>
+
+</body>
+
+</html>

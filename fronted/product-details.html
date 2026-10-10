@@ -1,526 +1,655 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product Details - Devi Mart</title><style>
-    * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-        font-family: Arial, sans-serif;
-    }
 
-    body {
-        background: #fff5f8;
-        color: #333;
-    }
+    <title>Product Details - Devi Mart</title>
 
-    nav {
-        background: #ff4f87;
-        padding: 18px 40px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        color: white;
-    }
+    <style>
 
-    nav h1 {
-        font-size: 28px;
-    }
-
-    nav a {
-        color: white;
-        text-decoration: none;
-        margin-left: 25px;
-        font-weight: bold;
-    }
-
-    .container {
-        width: 90%;
-        max-width: 1000px;
-        margin: 50px auto;
-    }
-
-    .product-box {
-        background: white;
-        padding: 35px;
-        border-radius: 15px;
-        display: flex;
-        gap: 50px;
-        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-    }
-
-    .product-image {
-        width: 45%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .product-image img {
-        width: 100%;
-        max-width: 400px;
-        height: 400px;
-        object-fit: contain;
-        border-radius: 10px;
-    }
-
-    .product-info {
-        flex: 1;
-        padding-top: 20px;
-    }
-
-    .product-info h2 {
-        font-size: 32px;
-        margin-bottom: 15px;
-        color: #333;
-    }
-
-    .price {
-        font-size: 28px;
-        color: #ff4f87;
-        font-weight: bold;
-        margin-bottom: 20px;
-    }
-
-    .description {
-        font-size: 17px;
-        line-height: 1.6;
-        margin-bottom: 25px;
-    }
-
-    .quantity {
-        margin-bottom: 25px;
-    }
-
-    .quantity label {
-        font-weight: bold;
-        margin-right: 10px;
-    }
-
-    .quantity input {
-        width: 60px;
-        padding: 8px;
-        font-size: 16px;
-    }
-
-    button {
-        padding: 13px 22px;
-        border: none;
-        border-radius: 8px;
-        font-size: 16px;
-        cursor: pointer;
-        margin-right: 10px;
-    }
-
-    .cart-btn {
-        background: #ff4f87;
-        color: white;
-    }
-
-    .buy-btn {
-        background: #333;
-        color: white;
-    }
-
-    .back-btn {
-        display: inline-block;
-        margin-top: 25px;
-        text-decoration: none;
-        color: #ff4f87;
-        font-weight: bold;
-    }
-
-    @media (max-width: 700px) {
-
-        .product-box {
-            flex-direction: column;
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
         }
 
-        .product-image {
-            width: 100%;
-        }
-
-        .product-image img {
-            height: 300px;
+        body {
+            background: #fff5f8;
+            color: #333;
         }
 
         nav {
-            padding: 15px;
+            background: #ff4f87;
+            padding: 18px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: white;
+        }
+
+        nav h1 {
+            font-size: 28px;
         }
 
         nav a {
-            margin-left: 10px;
+            color: white;
+            text-decoration: none;
+            margin-left: 25px;
+            font-weight: bold;
         }
-    }
-</style>
 
-</head><body><nav><h1>Devi Mart</h1>
+        .container {
+            width: 90%;
+            max-width: 1000px;
+            margin: 50px auto;
+        }
 
-<div>
-    <a href="home.html">Home</a>
-    <a href="products.html">Products</a>
-    <a href="cart.html">Cart</a>
-</div>
+        .product-box {
+            background: white;
+            padding: 35px;
+            border-radius: 15px;
+            display: flex;
+            gap: 50px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
 
-</nav><div class="container"><div class="product-box">
+        .product-image {
+            width: 45%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
 
-    <div class="product-image">
+        .product-image img {
+            width: 100%;
+            max-width: 400px;
+            height: 400px;
+            object-fit: contain;
+            border-radius: 10px;
+        }
 
-        <img
-            id="productImage"
-            src=""
-            alt="Product"
-        >
+        .product-info {
+            flex: 1;
+            padding-top: 20px;
+        }
+
+        .product-info h2 {
+            font-size: 32px;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .price {
+            font-size: 28px;
+            color: #ff4f87;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .description {
+            font-size: 17px;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .quantity {
+            margin-bottom: 25px;
+        }
+
+        .quantity label {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .quantity input {
+            width: 60px;
+            padding: 8px;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 13px 22px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        button:disabled {
+            background: #aaa;
+            cursor: not-allowed;
+        }
+
+        .cart-btn {
+            background: #ff4f87;
+            color: white;
+        }
+
+        .buy-btn {
+            background: #333;
+            color: white;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-top: 25px;
+            text-decoration: none;
+            color: #ff4f87;
+            font-weight: bold;
+        }
+
+        @media (max-width: 700px) {
+
+            .product-box {
+                flex-direction: column;
+            }
+
+            .product-image {
+                width: 100%;
+            }
+
+            .product-image img {
+                height: 300px;
+            }
+
+            nav {
+                padding: 15px;
+            }
+
+            nav a {
+                margin-left: 10px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <nav>
+
+        <h1>
+            Devi Mart
+        </h1>
+
+        <div>
+
+            <a href="home.html">
+                Home
+            </a>
+
+            <a href="products.html">
+                Products
+            </a>
+
+            <a href="cart.html">
+                Cart
+            </a>
+
+        </div>
+
+    </nav>
+
+
+    <div class="container">
+
+        <div class="product-box">
+
+            <div class="product-image">
+
+                <img
+                    id="productImage"
+                    src=""
+                    alt="Product"
+                >
+
+            </div>
+
+
+            <div class="product-info">
+
+                <h2 id="productName">
+                    Product Name
+                </h2>
+
+                <div
+                    class="price"
+                    id="productPrice"
+                >
+                    ₹0
+                </div>
+
+                <p
+                    class="description"
+                    id="productDescription"
+                >
+                    This product is available at Devi Mart.
+                </p>
+
+
+                <div class="quantity">
+
+                    <label for="quantity">
+                        Quantity:
+                    </label>
+
+                    <input
+                        type="number"
+                        id="quantity"
+                        value="1"
+                        min="1"
+                    >
+
+                </div>
+
+
+                <button
+                    class="cart-btn"
+                    onclick="addToCart()"
+                    id="addCartButton"
+                >
+                    Add to Cart
+                </button>
+
+
+                <button
+                    class="buy-btn"
+                    onclick="buyNow()"
+                    id="buyNowButton"
+                >
+                    Buy Now
+                </button>
+
+
+                <br>
+
+
+                <a
+                    href="products.html"
+                    class="back-btn"
+                >
+                    ← Back to Products
+                </a>
+
+            </div>
+
+        </div>
 
     </div>
 
 
-    <div class="product-info">
+    <script>
 
-        <h2 id="productName">
-            Product Name
-        </h2>
+        /*
+         * GET SELECTED PRODUCT
+         */
 
-        <div class="price" id="productPrice">
-            ₹0
-        </div>
-
-        <p class="description" id="productDescription">
-            This product is available at Devi Mart.
-            It is a quality product available for online shopping.
-        </p>
-
-
-        <div class="quantity">
-
-            <label for="quantity">
-                Quantity:
-            </label>
-
-            <input
-                type="number"
-                id="quantity"
-                value="1"
-                min="1"
-            >
-
-        </div>
-
-
-        <button
-            class="cart-btn"
-            onclick="addToCart()"
-            id="addCartButton"
-        >
-            Add to Cart
-        </button>
-
-
-        <button
-            class="buy-btn"
-            onclick="buyNow()"
-        >
-            Buy Now
-        </button>
-
-
-        <br>
-
-
-        <a
-            href="products.html"
-            class="back-btn"
-        >
-            ← Back to Products
-        </a>
-
-    </div>
-
-</div>
-
-</div><script>
-
-const selectedProduct =
-    JSON.parse(
-        localStorage.getItem("selectedProduct")
-    );
-
-
-if (selectedProduct) {
-
-    document.getElementById("productImage").src =
-        selectedProduct.image;
-
-    document.getElementById("productImage").alt =
-        selectedProduct.name;
-
-    document.getElementById("productName").textContent =
-        selectedProduct.name;
-
-    document.getElementById("productPrice").textContent =
-        "₹" +
-        Number(selectedProduct.price)
-        .toLocaleString("en-IN");
-
-    document.getElementById("productDescription").textContent =
-        selectedProduct.name +
-        " is a quality product available at Devi Mart. " +
-        "Enjoy shopping with Devi Mart.";
-
-} else {
-
-    document.getElementById("productName").textContent =
-        "Product Not Found";
-
-    document.getElementById("productDescription").textContent =
-        "Please go back to the Products page and select a product.";
-
-}
-
-
-/* ============================
-   ADD TO CART - BACKEND
-   ============================ */
-
-async function addToCart() {
-
-    if (!selectedProduct) {
-
-        alert("Product not found!");
-
-        return;
-    }
-
-
-    const quantity =
-        parseInt(
-            document.getElementById("quantity").value
-        );
-
-
-    if (isNaN(quantity) || quantity < 1) {
-
-        alert(
-            "Quantity must be at least 1"
-        );
-
-        return;
-    }
-
-
-    const cartButton =
-        document.getElementById("addCartButton");
-
-
-    cartButton.disabled = true;
-
-    cartButton.textContent =
-        "Adding...";
-
-
-    const cartItem = {
-
-        productName:
-            selectedProduct.name,
-
-        price:
-            Number(selectedProduct.price),
-
-        quantity:
-            quantity,
-
-        totalPrice:
-            Number(selectedProduct.price) *
-            quantity,
-
-        image:
-            selectedProduct.image
-
-    };
-
-
-    try {
-
-        const response =
-            await fetch(
-                "http://localhost:8080/api/cart",
-                {
-                    method: "POST",
-
-                    headers: {
-                        "Content-Type":
-                            "application/json"
-                    },
-
-                    body:
-                        JSON.stringify(cartItem)
-                }
+        const selectedProduct =
+            JSON.parse(
+                localStorage.getItem("selectedProduct")
             );
 
 
-        if (!response.ok) {
+        /*
+         * DISPLAY PRODUCT
+         */
 
-            throw new Error(
-                "Failed to add product to cart"
-            );
+        if (selectedProduct) {
+
+            document.getElementById(
+                "productImage"
+            ).src =
+                selectedProduct.image || "";
+
+
+            document.getElementById(
+                "productImage"
+            ).alt =
+                selectedProduct.name;
+
+
+            document.getElementById(
+                "productName"
+            ).textContent =
+                selectedProduct.name;
+
+
+            document.getElementById(
+                "productPrice"
+            ).textContent =
+                "₹" +
+                Number(
+                    selectedProduct.price
+                ).toLocaleString("en-IN");
+
+
+            document.getElementById(
+                "productDescription"
+            ).textContent =
+                selectedProduct.name +
+                " is a quality product available at Devi Mart. " +
+                "Enjoy shopping with Devi Mart.";
+
+        } else {
+
+            document.getElementById(
+                "productName"
+            ).textContent =
+                "Product Not Found";
+
+
+            document.getElementById(
+                "productDescription"
+            ).textContent =
+                "Please go back to Products and select a product.";
 
         }
 
 
-        const savedCart =
-            await response.json();
+        /*
+         * ADD TO CART
+         */
+
+        async function addToCart() {
+
+            if (!selectedProduct) {
+
+                alert("Product not found!");
+
+                return;
+
+            }
 
 
-        alert(
-            savedCart.productName +
-            " added to cart!"
-        );
+            const quantity =
+                parseInt(
+                    document.getElementById(
+                        "quantity"
+                    ).value
+                );
 
 
-        cartButton.textContent =
-            "🛒 Added (" +
-            savedCart.quantity +
-            ")";
+            if (
+                isNaN(quantity) ||
+                quantity < 1
+            ) {
+
+                alert(
+                    "Quantity must be at least 1"
+                );
+
+                return;
+
+            }
 
 
-    } catch (error) {
-
-        console.error(
-            "Cart Error:",
-            error
-        );
+            const cartButton =
+                document.getElementById(
+                    "addCartButton"
+                );
 
 
-        cartButton.textContent =
-            "Add to Cart";
+            cartButton.disabled = true;
+
+            cartButton.textContent =
+                "Adding...";
 
 
-        alert(
-            "Could not add product to cart. " +
-            "Make sure Spring Boot backend is running."
-        );
+            const cartItem = {
 
-    }
+                productName:
+                    selectedProduct.name,
 
+                price:
+                    Number(
+                        selectedProduct.price
+                    ),
 
-    cartButton.disabled = false;
+                quantity:
+                    quantity,
 
-}
+                totalPrice:
+                    Number(
+                        selectedProduct.price
+                    ) * quantity,
 
+                image:
+                    selectedProduct.image || ""
 
-/* ============================
-   BUY NOW
-   ============================ */
-
-async function buyNow() {
-
-    if (!selectedProduct) {
-
-        alert("Product not found!");
-
-        return;
-    }
+            };
 
 
-    const quantity =
-        parseInt(
-            document.getElementById("quantity").value
-        );
+            try {
+
+                const response =
+                    await fetch(
+                        "http://localhost:8080/api/cart",
+                        {
+                            method: "POST",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
+
+                            body:
+                                JSON.stringify(
+                                    cartItem
+                                )
+                        }
+                    );
 
 
-    if (isNaN(quantity) || quantity < 1) {
+                if (!response.ok) {
 
-        alert(
-            "Quantity must be at least 1"
-        );
+                    throw new Error(
+                        "Failed to add product to cart"
+                    );
 
-        return;
-    }
-
-
-    const cartButton =
-        document.getElementById("addCartButton");
-
-
-    cartButton.disabled = true;
-
-
-    const cartItem = {
-
-        productName:
-            selectedProduct.name,
-
-        price:
-            Number(selectedProduct.price),
-
-        quantity:
-            quantity,
-
-        totalPrice:
-            Number(selectedProduct.price) *
-            quantity,
-
-        image:
-            selectedProduct.image
-
-    };
-
-
-    try {
-
-        const response =
-            await fetch(
-                "http://localhost:8080/api/cart",
-                {
-                    method: "POST",
-
-                    headers: {
-                        "Content-Type":
-                            "application/json"
-                    },
-
-                    body:
-                        JSON.stringify(cartItem)
                 }
-            );
 
 
-        if (!response.ok) {
+                const savedCart =
+                    await response.json();
 
-            throw new Error(
-                "Failed to add product to cart"
-            );
+
+                alert(
+                    savedCart.productName +
+                    " added to cart!"
+                );
+
+
+                cartButton.textContent =
+                    "🛒 Added (" +
+                    savedCart.quantity +
+                    ")";
+
+
+            } catch (error) {
+
+                console.error(
+                    "Cart Error:",
+                    error
+                );
+
+
+                alert(
+                    "Could not add product to cart. " +
+                    "Make sure Spring Boot backend is running."
+                );
+
+
+                cartButton.textContent =
+                    "Add to Cart";
+
+            }
+
+
+            cartButton.disabled = false;
 
         }
 
 
-        await response.json();
+        /*
+         * BUY NOW
+         *
+         * Buy Now will:
+         * 1. Add product to backend cart
+         * 2. Open checkout page
+         * 3. User enters delivery details
+         * 4. Place Order saves order in database
+         * 5. Cart is cleared
+         * 6. Order Success page opens
+         */
+
+        async function buyNow() {
+
+            if (!selectedProduct) {
+
+                alert("Product not found!");
+
+                return;
+
+            }
 
 
-        window.location.href =
-            "cart.html";
+            const quantity =
+                parseInt(
+                    document.getElementById(
+                        "quantity"
+                    ).value
+                );
 
 
-    } catch (error) {
+            if (
+                isNaN(quantity) ||
+                quantity < 1
+            ) {
 
-        console.error(
-            "Buy Now Error:",
-            error
-        );
+                alert(
+                    "Quantity must be at least 1"
+                );
+
+                return;
+
+            }
 
 
-        cartButton.disabled = false;
+            const buyButton =
+                document.getElementById(
+                    "buyNowButton"
+                );
 
 
-        alert(
-            "Could not process Buy Now. " +
-            "Make sure Spring Boot backend is running."
-        );
+            buyButton.disabled = true;
 
-    }
+            buyButton.textContent =
+                "Processing...";
 
-}
 
-</script></body>
+            const cartItem = {
+
+                productName:
+                    selectedProduct.name,
+
+                price:
+                    Number(
+                        selectedProduct.price
+                    ),
+
+                quantity:
+                    quantity,
+
+                totalPrice:
+                    Number(
+                        selectedProduct.price
+                    ) * quantity,
+
+                image:
+                    selectedProduct.image || ""
+
+            };
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        "http://localhost:8080/api/cart",
+                        {
+                            method: "POST",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
+
+                            body:
+                                JSON.stringify(
+                                    cartItem
+                                )
+                        }
+                    );
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "Failed to add product to cart"
+                    );
+
+                }
+
+
+                await response.json();
+
+
+                /*
+                 * IMPORTANT:
+                 * Do NOT directly open order-success.html.
+                 *
+                 * First go to checkout.
+                 * Checkout will create the order
+                 * in the ORDERS database table.
+                 */
+
+                window.location.href =
+                    "checkout.html";
+
+
+            } catch (error) {
+
+                console.error(
+                    "Buy Now Error:",
+                    error
+                );
+
+
+                alert(
+                    "Could not process Buy Now. " +
+                    "Make sure Spring Boot backend is running."
+                );
+
+
+                buyButton.disabled = false;
+
+                buyButton.textContent =
+                    "Buy Now";
+
+            }
+
+        }
+
+    </script>
+
+</body>
+
 </html>

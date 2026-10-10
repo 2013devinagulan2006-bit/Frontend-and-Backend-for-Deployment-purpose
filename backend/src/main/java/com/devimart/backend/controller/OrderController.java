@@ -5,6 +5,7 @@ import com.devimart.backend.repository.OrderRepository;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @CrossOrigin(origins = "*")
@@ -20,6 +21,11 @@ public class OrderController {
     @GetMapping
     public List<Order> getAllOrders() {
         return orderRepository.findAll();
+    }
+
+    @GetMapping("/{id}")
+    public Optional<Order> getOrderById(@PathVariable Long id) {
+        return orderRepository.findById(id);
     }
 
     @PostMapping

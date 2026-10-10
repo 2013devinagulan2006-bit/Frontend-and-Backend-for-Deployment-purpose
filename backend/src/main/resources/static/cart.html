@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Devi Mart - Cart</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f5f5f5;
+        }
+
+        nav {
+            background: linear-gradient(135deg, #ff4f9a, #ff1493);
+            padding: 18px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            color: white;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            margin-left: 20px;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1000px;
+            margin: 35px auto;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .select-all-box {
+            background: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+        }
+
+        .select-all-box label {
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .select-all-box input {
+            width: 18px;
+            height: 18px;
+            margin-right: 10px;
+            vertical-align: middle;
+            cursor: pointer;
+        }
+
+        .cart-item {
+            background: white;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+        }
+
+        .product-checkbox {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .cart-item img {
+            width: 120px;
+            height: 120px;
+            object-fit: contain;
+            border-radius: 10px;
+        }
+
+        .product-info {
+            flex: 1;
+        }
+
+        .product-info h3 {
+            margin-bottom: 8px;
+            font-size: 20px;
+        }
+
+        .price {
+            color: #e91e63;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .quantity-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .quantity-input {
+            width: 65px;
+            padding: 7px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            text-align: center;
+        }
+
+        .item-total {
+            font-weight: bold;
+            margin-top: 8px;
+        }
+
+        .remove-btn {
+            border: none;
+            background: #e91e63;
+            color: white;
+            padding: 10px 18px;
+            border-radius: 7px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .remove-btn:hover {
+            background: #c2185b;
+        }
+
+        .summary {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+            margin-top: 25px;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            font-size: 18px;
+        }
+
+        .selected-total {
+            color: #e91e63;
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .checkout-btn,
+        .clear-btn {
+            border: none;
+            padding: 13px 22px;
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        .checkout-btn {
+            background: #ff1493;
+        }
+
+        .checkout-btn:disabled {
+            background: #aaa;
+            cursor: not-allowed;
+        }
+
+        .clear-btn {
+            background: #343a55;
+        }
+
+        .continue-shopping {
+            display: block;
+            text-align: right;
+            margin-top: 18px;
+            color: #e91e63;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .empty-cart {
+            background: white;
+            text-align: center;
+            padding: 60px 20px;
+            border-radius: 15px;
+        }
+
+        .empty-cart a {
+            color: #e91e63;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        footer {
+            margin-top: 50px;
+            padding: 25px;
+            background: #222;
+            color: white;
+            text-align: center;
+        }
+
+        @media (max-width: 600px) {
+
+            nav {
+                padding: 15px 20px;
+            }
+
+            .nav-links a {
+                margin-left: 10px;
+            }
+
+            .cart-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <nav>
+
+        <div class="logo">
+            Devi Mart
+        </div>
+
+        <div class="nav-links">
+
+            <a href="home.html">Home</a>
+
+            <a href="products.html">Products</a>
+
+        </div>
+
+    </nav>
+
+
+    <div class="container">
+
+        <h1>
+            🛒 My Cart
+        </h1>
+
+        <div id="cartContainer">
+
+            <p style="text-align:center;">
+                Loading cart...
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <footer>
+
+        <p>
+            © 2026 Devi Mart. All Rights Reserved.
+        </p>
+
+    </footer>
+
+
+    <script>
+
+        let cart = [];
+
+
+        async function loadCart() {
+
+            try {
+
+                const response =
+                    await fetch(
+                        "http://localhost:8080/api/cart"
+                    );
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "Could not load cart"
+                    );
+
+                }
+
+
+                cart = await response.json();
+
+
+                displayCart();
+
+            } catch (error) {
+
+                console.error(
+                    "Cart Error:",
+                    error
+                );
+
+
+                document.getElementById(
+                    "cartContainer"
+                ).innerHTML = `
+
+                    <div class="empty-cart">
+
+                        <h2>
+                            Unable to load cart ❌
+                        </h2>
+
+                        <p>
+                            Please make sure the backend is running.
+                        </p>
+
+                    </div>
+
+                `;
+
+            }
+
+        }
+
+
+        function displayCart() {
+
+            const container =
+                document.getElementById(
+                    "cartContainer"
+                );
+
+
+            if (!cart || cart.length === 0) {
+
+                container.innerHTML = `
+
+                    <div class="empty-cart">
+
+                        <h2>
+                            Your cart is empty 🛒
+                        </h2>
+
+                        <p>
+                            Add some products to your cart.
+                        </p>
+
+                        <br>
+
+                        <a href="products.html">
+                            Continue Shopping
+                        </a>
+
+                    </div>
+
+                `;
+
+                return;
+
+            }
+
+
+            container.innerHTML = `
+
+                <div class="select-all-box">
+
+                    <label>
+
+                        <input
+                            type="checkbox"
+                            id="selectAll"
+                            onchange="toggleSelectAll()"
+                        >
+
+                        Select All
+
+                    </label>
+
+                </div>
+
+
+                <div id="cartItems"></div>
+
+
+                <div class="summary">
+
+                    <div class="summary-row">
+
+                        <span>
+                            Selected Total:
+                        </span>
+
+                        <span class="selected-total">
+
+                            ₹<span id="selectedTotal">
+                                0
+                            </span>
+
+                        </span>
+
+                    </div>
+
+
+                    <div class="buttons">
+
+                        <button
+                            class="checkout-btn"
+                            id="checkoutButton"
+                            onclick="checkoutSelected()"
+                            disabled
+                        >
+                            Proceed to Checkout
+                        </button>
+
+
+                        <button
+                            class="clear-btn"
+                            onclick="clearCart()"
+                        >
+                            Clear Cart
+                        </button>
+
+                    </div>
+
+
+                    <a
+                        href="products.html"
+                        class="continue-shopping"
+                    >
+                        ← Continue Shopping
+                    </a>
+
+                </div>
+
+            `;
+
+
+            const cartItems =
+                document.getElementById(
+                    "cartItems"
+                );
+
+
+            cart.forEach(function(item) {
+
+                const price =
+                    Number(item.price) || 0;
+
+
+                const quantity =
+                    Number(item.quantity) || 1;
+
+
+                const totalPrice =
+                    Number(item.totalPrice) ||
+                    price * quantity;
+
+
+                cartItems.innerHTML += `
+
+                    <div
+                        class="cart-item"
+                        data-id="${item.id}"
+                    >
+
+                        <input
+                            type="checkbox"
+                            class="product-checkbox"
+                            value="${item.id}"
+                            onchange="updateSelectedTotal()"
+                        >
+
+
+                        <img
+                            src="${item.image || ""}"
+                            alt="${item.productName || "Product"}"
+                        >
+
+
+                        <div class="product-info">
+
+                            <h3>
+                                ${item.productName || "Product"}
+                            </h3>
+
+
+                            <div class="price">
+                                ₹${price.toLocaleString("en-IN")}
+                            </div>
+
+
+                            <div class="quantity-row">
+
+                                <span>
+                                    Quantity:
+                                </span>
+
+                                <input
+                                    type="number"
+                                    class="quantity-input"
+                                    min="1"
+                                    value="${quantity}"
+                                    onchange="updateQuantity(${item.id}, this.value)"
+                                >
+
+                            </div>
+
+
+                            <div class="item-total">
+
+                                Item Total:
+                                ₹${totalPrice.toLocaleString("en-IN")}
+
+                            </div>
+
+                        </div>
+
+
+                        <button
+                            class="remove-btn"
+                            onclick="removeItem(${item.id})"
+                        >
+                            Remove
+                        </button>
+
+                    </div>
+
+                `;
+
+            });
+
+
+            updateSelectedTotal();
+
+        }
+
+
+        function toggleSelectAll() {
+
+            const selectAll =
+                document.getElementById(
+                    "selectAll"
+                );
+
+
+            const checkboxes =
+                document.querySelectorAll(
+                    ".product-checkbox"
+                );
+
+
+            checkboxes.forEach(
+                function(checkbox) {
+
+                    checkbox.checked =
+                        selectAll.checked;
+
+                }
+            );
+
+
+            updateSelectedTotal();
+
+        }
+
+
+        function updateSelectedTotal() {
+
+            const checkboxes =
+                document.querySelectorAll(
+                    ".product-checkbox"
+                );
+
+
+            let selectedIds = [];
+
+            let selectedTotal = 0;
+
+
+            checkboxes.forEach(
+                function(checkbox) {
+
+                    if (checkbox.checked) {
+
+                        selectedIds.push(
+                            String(checkbox.value)
+                        );
+
+
+                        const item =
+                            cart.find(
+                                function(product) {
+
+                                    return String(
+                                        product.id
+                                    ) === String(
+                                        checkbox.value
+                                    );
+
+                                }
+                            );
+
+
+                        if (item) {
+
+                            const price =
+                                Number(item.price) || 0;
+
+
+                            const quantity =
+                                Number(item.quantity) || 1;
+
+
+                            const itemTotal =
+                                Number(item.totalPrice) ||
+                                price * quantity;
+
+
+                            selectedTotal +=
+                                itemTotal;
+
+                        }
+
+                    }
+
+                }
+            );
+
+
+            const totalElement =
+                document.getElementById(
+                    "selectedTotal"
+                );
+
+
+            if (totalElement) {
+
+                totalElement.textContent =
+                    selectedTotal.toLocaleString(
+                        "en-IN"
+                    );
+
+            }
+
+
+            const checkoutButton =
+                document.getElementById(
+                    "checkoutButton"
+                );
+
+
+            if (checkoutButton) {
+
+                checkoutButton.disabled =
+                    selectedIds.length === 0;
+
+            }
+
+
+            const selectAll =
+                document.getElementById(
+                    "selectAll"
+                );
+
+
+            if (selectAll) {
+
+                selectAll.checked =
+                    cart.length > 0 &&
+                    selectedIds.length === cart.length;
+
+            }
+
+        }
+
+
+        async function updateQuantity(id, value) {
+
+            let quantity =
+                parseInt(value);
+
+
+            if (isNaN(quantity) || quantity < 1) {
+
+                quantity = 1;
+
+            }
+
+
+            const item =
+                cart.find(
+                    function(product) {
+
+                        return String(
+                            product.id
+                        ) === String(id);
+
+                    }
+                );
+
+
+            if (!item) {
+
+                return;
+
+            }
+
+
+            item.quantity = quantity;
+
+
+            item.totalPrice =
+                Number(item.price || 0) *
+                quantity;
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        "http://localhost:8080/api/cart/" +
+                        id,
+                        {
+                            method: "PUT",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
+
+                            body:
+                                JSON.stringify(item)
+                        }
+                    );
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "Quantity update failed"
+                    );
+
+                }
+
+
+                await loadCart();
+
+            } catch (error) {
+
+                console.error(
+                    "Quantity Error:",
+                    error
+                );
+
+
+                alert(
+                    "Unable to update quantity."
+                );
+
+
+                await loadCart();
+
+            }
+
+        }
+
+
+        async function removeItem(id) {
+
+            try {
+
+                const response =
+                    await fetch(
+                        "http://localhost:8080/api/cart/" +
+                        id,
+                        {
+                            method: "DELETE"
+                        }
+                    );
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "Remove failed"
+                    );
+
+                }
+
+
+                await loadCart();
+
+            } catch (error) {
+
+                console.error(
+                    "Remove Error:",
+                    error
+                );
+
+
+                alert(
+                    "Unable to remove item."
+                );
+
+            }
+
+        }
+
+
+        async function clearCart() {
+
+            if (!cart || cart.length === 0) {
+
+                return;
+
+            }
+
+
+            const confirmed =
+                confirm(
+                    "Are you sure you want to clear the cart?"
+                );
+
+
+            if (!confirmed) {
+
+                return;
+
+            }
+
+
+            try {
+
+                for (
+                    const item of cart
+                ) {
+
+                    const response =
+                        await fetch(
+                            "http://localhost:8080/api/cart/" +
+                            item.id,
+                            {
+                                method: "DELETE"
+                            }
+                        );
+
+
+                    if (!response.ok) {
+
+                        throw new Error(
+                            "Clear cart failed"
+                        );
+
+                    }
+
+                }
+
+
+                await loadCart();
+
+            } catch (error) {
+
+                console.error(
+                    "Clear Cart Error:",
+                    error
+                );
+
+
+                alert(
+                    "Unable to clear cart."
+                );
+
+
+                await loadCart();
+
+            }
+
+        }
+
+
+        function checkoutSelected() {
+
+            const checkboxes =
+                document.querySelectorAll(
+                    ".product-checkbox:checked"
+                );
+
+
+            if (
+                !checkboxes ||
+                checkboxes.length === 0
+            ) {
+
+                alert(
+                    "Please select at least one product."
+                );
+
+                return;
+
+            }
+
+
+            const selectedIds =
+                Array.from(
+                    checkboxes
+                ).map(
+                    function(checkbox) {
+
+                        return checkbox.value;
+
+                    }
+                );
+
+
+            const cartIds =
+                selectedIds.join(",");
+
+
+            window.location.href =
+                "checkout.html?cartIds=" +
+                encodeURIComponent(
+                    cartIds
+                );
+
+        }
+
+
+        loadCart();
+
+    </script>
+
+</body>
+
+</html>

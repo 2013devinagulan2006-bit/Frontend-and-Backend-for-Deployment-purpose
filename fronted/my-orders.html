@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Devi Mart - My Orders</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f7f7f7;
+        }
+
+        nav {
+            background: linear-gradient(135deg, #ff4f9a, #ff1493);
+            padding: 18px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            color: white;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            margin-left: 20px;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1000px;
+            margin: 35px auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        .order-box {
+            background: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .order-box h2 {
+            color: #ff1493;
+            margin-bottom: 15px;
+        }
+
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .order-item:last-child {
+            border-bottom: none;
+        }
+
+        .product-name {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .order-details {
+            color: #555;
+            margin-top: 6px;
+        }
+
+        .price {
+            color: #e91e63;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .status {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 6px 12px;
+            border-radius: 20px;
+            background: #e8f5e9;
+            color: #2e7d32;
+            font-weight: bold;
+        }
+
+        .empty {
+            background: white;
+            padding: 50px;
+            text-align: center;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .empty h2 {
+            margin-bottom: 15px;
+        }
+
+        .home-btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 25px;
+            background: #ff1493;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 30px;
+            font-size: 18px;
+        }
+
+        footer {
+            margin-top: 50px;
+            padding: 25px;
+            background: #222;
+            color: white;
+            text-align: center;
+        }
+
+        @media (max-width: 600px) {
+
+            nav {
+                padding: 15px 20px;
+            }
+
+            .nav-links a {
+                margin-left: 8px;
+            }
+
+            .order-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <nav>
+
+        <div class="logo">
+            Devi Mart
+        </div>
+
+        <div class="nav-links">
+
+            <a href="home.html">
+                Home
+            </a>
+
+            <a href="products.html">
+                Products
+            </a>
+
+            <a href="cart.html">
+                Cart 🛒
+            </a>
+
+            <a href="wishlist.html">
+                Wishlist ❤️
+            </a>
+
+        </div>
+
+    </nav>
+
+
+    <div class="container">
+
+        <h1>
+            📦 My Orders
+        </h1>
+
+
+        <div id="orders">
+
+            <div class="loading">
+                Loading your orders...
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <footer>
+
+        <p>
+            © 2026 Devi Mart. All Rights Reserved.
+        </p>
+
+    </footer>
+
+
+    <script>
+
+        async function loadOrders() {
+
+            const ordersContainer =
+                document.getElementById("orders");
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        "http://localhost:8080/api/orders"
+                    );
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "Could not load orders"
+                    );
+
+                }
+
+
+                const orders =
+                    await response.json();
+
+
+                if (
+                    !orders ||
+                    orders.length === 0
+                ) {
+
+                    ordersContainer.innerHTML = `
+
+                        <div class="empty">
+
+                            <h2>
+                                No Orders Yet 📦
+                            </h2>
+
+                            <p>
+                                You have not placed any orders yet.
+                            </p>
+
+                            <a
+                                href="products.html"
+                                class="home-btn"
+                            >
+                                Start Shopping
+                            </a>
+
+                        </div>
+
+                    `;
+
+                    return;
+
+                }
+
+
+                ordersContainer.innerHTML = "";
+
+
+                orders.forEach(function(order, index) {
+
+                    ordersContainer.innerHTML += `
+
+                        <div class="order-box">
+
+                            <h2>
+                                Order #${index + 1}
+                            </h2>
+
+                            <div class="order-item">
+
+                                <div>
+
+                                    <div class="product-name">
+                                        ${order.productName}
+                                    </div>
+
+                                    <div class="order-details">
+                                        Quantity:
+                                        ${order.quantity}
+                                    </div>
+
+                                    <div class="order-details">
+                                        Price:
+                                        ₹${Number(order.price).toLocaleString("en-IN")}
+                                    </div>
+
+                                </div>
+
+
+                                <div>
+
+                                    <div class="price">
+                                        ₹${Number(order.totalPrice).toLocaleString("en-IN")}
+                                    </div>
+
+                                    <div class="status">
+                                        Order Placed
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    `;
+
+                });
+
+
+            } catch (error) {
+
+                console.error(
+                    "Orders Error:",
+                    error
+                );
+
+
+                ordersContainer.innerHTML = `
+
+                    <div class="empty">
+
+                        <h2>
+                            Unable to Load Orders ❌
+                        </h2>
+
+                        <p>
+                            Please make sure the backend is running.
+                        </p>
+
+                        <a
+                            href="home.html"
+                            class="home-btn"
+                        >
+                            Back to Home
+                        </a>
+
+                    </div>
+
+                `;
+
+            }
+
+        }
+
+
+        loadOrders();
+
+    </script>
+
+</body>
+
+</html>

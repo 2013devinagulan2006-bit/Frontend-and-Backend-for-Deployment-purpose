@@ -25,56 +25,30 @@ public class CartController {
     @PostMapping
     public Cart addToCart(@RequestBody Cart cart) {
 
-        System.out.println(
-            "POST /api/cart received: " +
-            cart.getProductName()
-        );
+        System.out.println("POST /api/cart received: " + cart.getProductName());
 
         Cart existingCart =
-                cartRepository.findByProductName(
-                        cart.getProductName()
-                );
+                cartRepository.findByProductName(cart.getProductName());
 
         if (existingCart != null) {
 
             int newQuantity =
-                    existingCart.getQuantity()
-                    + cart.getQuantity();
+                    existingCart.getQuantity() + cart.getQuantity();
 
             existingCart.setQuantity(newQuantity);
 
             existingCart.setTotalPrice(
-                    existingCart.getPrice()
-                    * newQuantity
+                    existingCart.getPrice() * newQuantity
             );
 
-            Cart savedCart =
-                    cartRepository.saveAndFlush(existingCart);
-
-            System.out.println(
-                "Cart updated: " +
-                savedCart.getProductName()
-            );
-
-            return savedCart;
+            return cartRepository.saveAndFlush(existingCart);
         }
 
         cart.setTotalPrice(
-                cart.getPrice()
-                * cart.getQuantity()
+                cart.getPrice() * cart.getQuantity()
         );
 
-        Cart savedCart =
-                cartRepository.saveAndFlush(cart);
-
-        System.out.println(
-            "Cart inserted: " +
-            savedCart.getProductName() +
-            " | ID: " +
-            savedCart.getId()
-        );
-
-        return savedCart;
+        return cartRepository.saveAndFlush(cart);
     }
 
     @PutMapping("/{id}")
@@ -89,8 +63,7 @@ public class CartController {
             return null;
         }
 
-        int quantity =
-                updatedCart.getQuantity();
+        int quantity = updatedCart.getQuantity();
 
         if (quantity < 1) {
             quantity = 1;
@@ -106,15 +79,12 @@ public class CartController {
     }
 
     @DeleteMapping("/{id}")
-    public void removeFromCart(
-            @PathVariable Long id) {
-
+    public void removeFromCart(@PathVariable Long id) {
         cartRepository.deleteById(id);
     }
 
     @DeleteMapping
     public void clearCart() {
-
         cartRepository.deleteAll();
     }
 }

@@ -67,17 +67,27 @@
             margin-bottom: 20px;
         }
 
-        .product {
+        .cart-item {
             display: flex;
             align-items: center;
             gap: 20px;
+            padding: 15px 0;
+            border-bottom: 1px solid #ddd;
         }
 
-        .product img {
-            width: 120px;
-            height: 120px;
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+
+        .cart-item img {
+            width: 100px;
+            height: 100px;
             object-fit: contain;
             border-radius: 10px;
+        }
+
+        .product-info {
+            flex: 1;
         }
 
         .product-info h3 {
@@ -86,6 +96,11 @@
 
         .product-info p {
             margin: 6px 0;
+        }
+
+        .item-total {
+            font-weight: bold;
+            color: #e91e63;
         }
 
         label {
@@ -136,6 +151,24 @@
             background: #d90072;
         }
 
+        .place-order:disabled {
+            background: #aaa;
+            cursor: not-allowed;
+        }
+
+        .empty-cart {
+            text-align: center;
+            padding: 40px;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-top: 20px;
+            color: #ff1493;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
         footer {
             margin-top: 50px;
             padding: 25px;
@@ -150,7 +183,7 @@
                 padding: 15px 20px;
             }
 
-            .product {
+            .cart-item {
                 flex-direction: column;
                 align-items: flex-start;
             }
@@ -205,37 +238,19 @@
                 🛒 Order Summary
             </h2>
 
-            <div class="product">
+            <div id="cartItems">
 
-                <img
-                    id="productImage"
-                    src=""
-                    alt="Product"
-                >
-
-                <div class="product-info">
-
-                    <h3 id="productName"></h3>
-
-                    <p>
-                        Price: ₹<span id="productPrice"></span>
-                    </p>
-
-                    <p>
-                        Quantity:
-                        <span id="productQuantity"></span>
-                    </p>
-
-                    <p>
-                        Subtotal: ₹<span id="subtotal"></span>
-                    </p>
-
-                </div>
+                <p>
+                    Loading cart...
+                </p>
 
             </div>
 
             <div class="total">
-                Total: ₹<span id="total"></span>
+
+                Total:
+                ₹<span id="total">0</span>
+
             </div>
 
         </div>
@@ -257,6 +272,7 @@
                 placeholder="Enter your full name"
             >
 
+
             <label>
                 Phone Number
             </label>
@@ -266,6 +282,7 @@
                 id="phone"
                 placeholder="Enter your phone number"
             >
+
 
             <label>
                 Delivery Address
@@ -309,9 +326,12 @@
 
             </select>
 
+
             <button
+                id="placeOrderButton"
                 class="place-order"
                 onclick="placeOrder()"
+                disabled
             >
                 Place Order
             </button>
@@ -332,60 +352,206 @@
 
     <script>
 
-        const cartProduct = JSON.parse(
-            localStorage.getItem("cartProduct")
-        );
+        let cart = [];
 
-        const loggedInUser = JSON.parse(
-            localStorage.getItem("loggedInUser")
-        );
+        let grandTotal = 0;
 
 
-        if (!cartProduct) {
+        async function loadCart() {
 
-            alert("Your cart is empty!");
+            try {
 
-            window.location.href = "cart.html";
+                const response =
+                    await fetch(
+                        "http://localhost:8080/api/cart"
+                    );
 
-        } else {
 
-            document.getElementById("productImage").src =
-                cartProduct.image;
+                if (!response.ok) {
 
-            document.getElementById("productName").textContent =
-                cartProduct.name;
+                    throw new Error(
+                        "Could not load cart"
+                    );
 
-            document.getElementById("productPrice").textContent =
-                Number(cartProduct.price).toLocaleString("en-IN");
+                }
 
-            document.getElementById("productQuantity").textContent =
-                cartProduct.quantity;
 
-            const subtotal =
-                Number(cartProduct.price) *
-                Number(cartProduct.quantity);
+                cart =
+                    await response.json();
 
-            document.getElementById("subtotal").textContent =
-                subtotal.toLocaleString("en-IN");
 
-            document.getElementById("total").textContent =
-                subtotal.toLocaleString("en-IN");
+                if (cart.length === 0) {
+
+                    document.getElementById(
+                        "cartItems"
+                    ).innerHTML = `
+
+                        <div class="empty-cart">
+
+                            <h3>
+                                Your cart is empty 🛒
+                            </h3>
+
+                            <a
+                                href="cart.html"
+                                class="back-btn"
+                            >
+                                ← Back to Cart
+                            </a>
+
+                        </div>
+
+                    `;
+
+
+                    document.getElementById(
+                        "placeOrderButton"
+                    ).disabled = true;
+
+
+                    return;
+
+                }
+
+
+                displayCart();
+
+
+            } catch (error) {
+
+                console.error(
+                    "Cart Error:",
+                    error
+                );
+
+
+                document.getElementById(
+                    "cartItems"
+                ).innerHTML = `
+
+                    <div class="empty-cart">
+
+                        <h3>
+                            Unable to load cart ❌
+                        </h3>
+
+                        <p>
+                            Please make sure the backend is running.
+                        </p>
+
+                    </div>
+
+                `;
+
+            }
+
+        }
+
+
+        function displayCart() {
+
+            const cartItems =
+                document.getElementById(
+                    "cartItems"
+                );
+
+
+            cartItems.innerHTML = "";
+
+            grandTotal = 0;
+
+
+            cart.forEach(function(item) {
+
+                const price =
+                    Number(item.price);
+
+                const quantity =
+                    Number(item.quantity);
+
+                const itemTotal =
+                    Number(item.totalPrice);
+
+
+                grandTotal += itemTotal;
+
+
+                cartItems.innerHTML += `
+
+                    <div class="cart-item">
+
+                        <img
+                            src="${item.image || ""}"
+                            alt="${item.productName}"
+                        >
+
+                        <div class="product-info">
+
+                            <h3>
+                                ${item.productName}
+                            </h3>
+
+                            <p>
+                                Price:
+                                ₹${price.toLocaleString("en-IN")}
+                            </p>
+
+                            <p>
+                                Quantity:
+                                ${quantity}
+                            </p>
+
+                            <p class="item-total">
+                                Subtotal:
+                                ₹${itemTotal.toLocaleString("en-IN")}
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                `;
+
+            });
+
+
+            document.getElementById(
+                "total"
+            ).textContent =
+                grandTotal.toLocaleString("en-IN");
+
+
+            document.getElementById(
+                "placeOrderButton"
+            ).disabled = false;
+
         }
 
 
         async function placeOrder() {
 
             const fullName =
-                document.getElementById("fullName").value.trim();
+                document.getElementById(
+                    "fullName"
+                ).value.trim();
+
 
             const phone =
-                document.getElementById("phone").value.trim();
+                document.getElementById(
+                    "phone"
+                ).value.trim();
+
 
             const address =
-                document.getElementById("address").value.trim();
+                document.getElementById(
+                    "address"
+                ).value.trim();
+
 
             const payment =
-                document.getElementById("payment").value;
+                document.getElementById(
+                    "payment"
+                ).value;
 
 
             if (
@@ -395,134 +561,105 @@
                 payment === ""
             ) {
 
-                alert("Please fill all the details!");
+                alert(
+                    "Please fill all the details!"
+                );
 
                 return;
+
             }
 
 
-            const price =
-                Number(cartProduct.price);
+            if (cart.length === 0) {
 
-            const quantity =
-                Number(cartProduct.quantity);
+                alert(
+                    "Your cart is empty!"
+                );
 
-            const totalPrice =
-                price * quantity;
+                return;
+
+            }
 
 
-            const order = {
+            const button =
+                document.getElementById(
+                    "placeOrderButton"
+                );
 
-                productName:
-                    cartProduct.name,
 
-                price:
-                    price,
+            button.disabled = true;
 
-                quantity:
-                    quantity,
-
-                totalPrice:
-                    totalPrice
-            };
+            button.textContent =
+                "Placing Order...";
 
 
             try {
 
-                const response =
+                for (
+                    const item of cart
+                ) {
+
+                    const order = {
+
+                        productName:
+                            item.productName,
+
+                        price:
+                            Number(item.price),
+
+                        quantity:
+                            Number(item.quantity),
+
+                        totalPrice:
+                            Number(item.totalPrice)
+
+                    };
+
+
+                    const response =
+                        await fetch(
+                            "http://localhost:8080/api/orders",
+                            {
+                                method: "POST",
+
+                                headers: {
+                                    "Content-Type":
+                                        "application/json"
+                                },
+
+                                body:
+                                    JSON.stringify(order)
+                            }
+                        );
+
+
+                    if (!response.ok) {
+
+                        throw new Error(
+                            "Order save failed"
+                        );
+
+                    }
+
+                }
+
+
+                const clearResponse =
                     await fetch(
-                        "http://localhost:8080/api/orders",
+                        "http://localhost:8080/api/cart",
                         {
-                            method: "POST",
-
-                            headers: {
-                                "Content-Type":
-                                    "application/json"
-                            },
-
-                            body:
-                                JSON.stringify(order)
+                            method: "DELETE"
                         }
                     );
 
 
-                if (!response.ok) {
+                if (!clearResponse.ok) {
 
                     throw new Error(
-                        "Failed to place order"
+                        "Cart clear failed"
                     );
+
                 }
-
-
-                const savedOrder =
-                    await response.json();
-
-                console.log(
-                    "Order saved to backend:",
-                    savedOrder
-                );
-
-
-                const frontendOrder = {
-
-                    orderId:
-                        "ORD" + Date.now(),
-
-                    product:
-                        cartProduct,
-
-                    customerName:
-                        fullName,
-
-                    customerEmail:
-                        loggedInUser
-                            ? loggedInUser.email
-                            : "",
-
-                    phone:
-                        phone,
-
-                    address:
-                        address,
-
-                    paymentMethod:
-                        payment,
-
-                    totalAmount:
-                        totalPrice,
-
-                    status:
-                        "Pending",
-
-                    orderDate:
-                        new Date().toLocaleString()
-                };
-
-
-                let orders =
-                    JSON.parse(
-                        localStorage.getItem("orders")
-                    ) || [];
-
-
-                orders.push(frontendOrder);
-
-
-                localStorage.setItem(
-                    "orders",
-                    JSON.stringify(orders)
-                );
-
-
-                localStorage.setItem(
-                    "order",
-                    JSON.stringify(frontendOrder)
-                );
-
-
-                localStorage.removeItem(
-                    "cartProduct"
-                );
 
 
                 alert(
@@ -531,25 +668,40 @@
 
 
                 window.location.href =
-                    "order-success.html";
+                    "home.html";
 
 
             } catch (error) {
 
                 console.error(
-                    "Order error:",
+                    "Order Error:",
                     error
                 );
 
+
                 alert(
-                    "Could not place order. Make sure the backend is running."
+                    "Could not place order. Please make sure the backend is running."
                 );
+
+
+                button.disabled = false;
+
+                button.textContent =
+                    "Place Order";
+
             }
 
         }
+
+
+        loadCart();
 
     </script>
 
 </body>
 
 </html>
+
+இதை paste → "Ctrl + S" → backend running-ஆ இருக்கிறதா பார்த்துக்கிட்டு test பண்ணுங்க.
+
+இப்போ "OrderSuccess.html" page போகாது; order save ஆனதும் Home page போகும்.
